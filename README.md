@@ -46,4 +46,4 @@ co(function* () {
 
 ## Compatibility
 - node >= 0.11.13
-- use node --harmony
+- use `node --harmony`
