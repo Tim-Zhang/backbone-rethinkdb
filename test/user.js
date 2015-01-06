@@ -1,13 +1,20 @@
 var co = require('co')
-  , _ = require('underscore')
-  , r = require('../co.rethinkdb')
-
-var RethinkModel = require('../backbone.rethinkdb.model')({database: 'test', table: 'user'});
+  , _  = require('underscore')
+  , r = require('../co.rethinkdb')()
+  , BackboneRdb = require('../index')({database: 'test', table: 'user'});
 
 var passed = 0;
-var User = RethinkModel.extend({
+
+// Collection
+var Users = BackboneRdb.Collection.extend({
     table: 'user'
 });
+// Model
+var User = BackboneRdb.Model.extend({
+    table: 'user'
+});
+
+
 
 co(function* () {
 
@@ -18,6 +25,8 @@ co(function* () {
     } catch(e) {
         // Ignore all exceptions becauseof they caused by exist database or table
     }
+
+    /* Model Test */
 
     // Create User
     var user = new User({name: 'Lilei', age: 18, sex: 'male'})
@@ -30,10 +39,10 @@ co(function* () {
     yield user2.fetch();
 
     if ( _.isEqual(user.toJSON(), user2.toJSON()) ) {
-        console.log('Create and Fetch functions are OK.');
+        console.log('Create/Fetch Model is OK.');
         passed++;
     } else {
-        console.error('There are some errors about create or fetch functions');
+        console.error('There are some errors about create/fetch Model');
     }
 
     // Modify User
@@ -41,13 +50,23 @@ co(function* () {
     yield user.fetch();
 
     if (user.get('age') === 19) {
-        console.log('Modify function is OK.');
+        console.log('Modify Model is OK.');
         passed++;
     } else {
-        console.error('There are some errors about modify function');
+        console.error('There are some errors about modify Model');
     }
 
-    if (passed === 2) console.log('====== Everthing is OK. ======');
+    /* Collection Test */
+    var users = new Users()
+    yield users.fetch();
+    if (users.length > 0 && user instanceof BackboneRdb.Model) {
+        console.log('Collection is OK.');
+        passed++;
+    } else {
+        console.error('There are some errors about Collection');
+    }
+
+    if (passed === 3) console.log('====== Everthing is OK. ======');
 
 }).catch(function(error) { console.error(error); });
 

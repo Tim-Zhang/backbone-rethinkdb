@@ -2,14 +2,13 @@ var _        = require('underscore')
   , Q        = require('q')
   , Backbone = require('backbone')
   , co       = require('co')
-  , r        = require('./co.rethinkdb')
+  , _r       = require('./co.rethinkdb')
 
 
 module.exports = function(dbconfig) {
     dbconfig || (dbconfig = {
           host: 'localhost'
         , database: 'test'
-        , table: 'test'
         , port: 28015
     });
 
@@ -18,6 +17,7 @@ module.exports = function(dbconfig) {
 
     return Backbone.Model.extend({
           dbconfig: dbconfig
+        , table: 'test'
         , filterId: 'id'
 
         , sync: function(method, model, options) {
@@ -37,10 +37,10 @@ module.exports = function(dbconfig) {
             var result
             , method = params.method
             , that = this
-            , table = this.dbconfig.table
+            , table = this.table
             , deferred = Q.defer()
 
-            r.config = this.dbconfig;
+            r = _r(this.dbconfig);
 
             co(function* (){
                 createdTime = Date.now();
