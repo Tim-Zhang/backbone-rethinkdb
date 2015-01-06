@@ -1,6 +1,8 @@
+var co = require('co')
+  , _ = require('underscore')
+  , r = require('../co.rethinkdb')
+
 var RethinkModel = require('../backbone.rethinkdb.model')({database: 'test', table: 'user'});
-var co = require('co');
-var _ = require('underscore');
 
 var passed = 0;
 var User = RethinkModel.extend({
@@ -8,6 +10,14 @@ var User = RethinkModel.extend({
 });
 
 co(function* () {
+
+    // Create Database `test` and Table `user` for test.
+    try {
+        yield r.dbCreate('test');
+        yield r.tableCreate('user');
+    } catch(e) {
+        // Ignore all exceptions becauseof they caused by exist database or table
+    }
 
     // Create User
     var user = new User({name: 'Lilei', age: 18, sex: 'male'})
@@ -39,7 +49,7 @@ co(function* () {
 
     if (passed === 2) console.log('====== Everthing is OK. ======');
 
-});
+}).catch(function(error) { console.error(error); });
 
 
 
