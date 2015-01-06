@@ -1,6 +1,6 @@
 {
   "name": "rethinkdb-backbone-model",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A Backbone-Model syncing with rethinkdb",
   "main": "backbone.rethinkdb.model",
   "scripts": {
