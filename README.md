@@ -36,7 +36,8 @@ co(function* () {
     yield user2.save({age: 19});
 
     // Fetch Collection
-    yield new Users().fetch();
+    var users = new Users();
+    yield users.fetch();
 
 
 }).catch(function(error) { console.error(error); });
