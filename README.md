@@ -9,7 +9,7 @@ just use it like normal Backbone, the only different is syncing(replace ajax to 
 ```
 var co = require('co')
   , _ = require('underscore')
-  , BackboneRdb = require('../index')({database: 'test', table: 'user'});
+  , BackboneRdb = require('backbone-rethinkdb')({database: 'test', table: 'user'});
 
 var passed = 0;
 var User = BackboneRdb.Model.extend({
