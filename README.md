@@ -2,7 +2,7 @@ Backbone-RethinkDB
 ===========================
 ## What is this?
 A Backbone version syncing with rethinkdb.
-just use it like normal Backbone, the only different is syncing(replace ajax to rethinkdb)
+just use it like normal Backbone, the only difference is syncing(replace ajax to rethinkdb)
 
 ## Usage
 
