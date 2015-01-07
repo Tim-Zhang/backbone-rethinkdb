@@ -9,15 +9,14 @@ just use it like normal Backbone, the only different is syncing(replace ajax to 
 ```
 var co = require('co')
   , _ = require('underscore')
-
-var RethinkModel = require('../backbone.rethinkdb.model')({database: 'test', table: 'user'});
+  , BackboneRdb = require('../index')({database: 'test', table: 'user'});
 
 var passed = 0;
-var User = RethinkModel.extend({
+var User = BackboneRdb.Model.extend({
     table: 'user'
 });
 
-var Users = RethinkCollection.extend({
+var Users = BackboneRdb.Collection.extend({
     table: 'user'
 });
 
