@@ -37,7 +37,10 @@ co(function* () {
 
     // Fetch Collection
     var users = new Users();
-    yield users.fetch();
+    yield users.fetch({orderBy: 'createTime', start: 0, length: 100});
+
+    // Count Table
+    var count = yield users.count();
 
 
 }).catch(function(error) { console.error(error); });
