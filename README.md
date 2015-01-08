@@ -34,6 +34,9 @@ co(function* () {
     // Modify Model
     yield user2.save({age: 19});
 
+    // Delete Model
+    yield user.destroy();
+
     // Fetch Collection
     var users = new Users();
     yield users.fetch({orderBy: 'createTime', start: 0, length: 100});
@@ -49,3 +52,13 @@ co(function* () {
 ## Compatibility
 - node >= 0.11.13
 - use `node --harmony`
+
+## Testing
+`npm test`
+
+```
+Create/Fetch Model is OK.
+Modify Model is OK.
+Collection is OK.
+====== Everthing is OK. ======
+```

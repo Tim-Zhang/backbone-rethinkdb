@@ -15,18 +15,11 @@ var User = BackboneRdb.Model.extend({
 });
 
 
-
 co(function* () {
+    /* Model Test */
 
     // Create Database `test` and Table `user` for test.
-    try {
-        yield r.dbCreate('test');
-        yield r.tableCreate('user');
-    } catch(e) {
-        // Ignore all exceptions becauseof they caused by exist database or table
-    }
-
-    /* Model Test */
+    yield createDbTable();
 
     // Create User
     var user = new User({name: 'Lilei', age: 18, sex: 'male'})
@@ -70,6 +63,10 @@ co(function* () {
 
 }).catch(function(error) { console.error(error); });
 
-
+function* createDbTable() {
+    try { yield r.dbCreate('test'); } catch(e) {} finally {
+        try { yield r.tableCreate('user'); } catch(e) {}
+    }
+}
 
 

@@ -49,13 +49,15 @@ module.exports = function(config) {
     if (!this._promise) {
       var query = this
       this._promise = new Promise(function(resolve, reject) {
+        var conn, res;
         co(function*() {
-          var conn = yield r.getConnection
-          var res  = yield run.call(query, conn)
+          conn = yield r.getConnection
+          res  = yield run.call(query, conn)
           r.releaseConnection(conn)
           resolve(res)
         }).catch(function(err) {
           reject(err)
+          conn && r.releaseConnection(conn)
         })
       })
     }
