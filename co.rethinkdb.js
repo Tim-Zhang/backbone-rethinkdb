@@ -44,7 +44,6 @@ module.exports = function(config) {
   // makes `co` to recognize these objects as promises, making the `.then()`
   // method the perfect place to execute the `.run()` method instead.
 
-  var Promise = require('bluebird')
   RDBOp.prototype.then = function() {
     if (!this._promise) {
       var query = this

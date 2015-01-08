@@ -1,5 +1,4 @@
 var _        = require('underscore')
-  , Q        = require('q')
   , Backbone = require('backbone')
   , co       = require('co')
   , _r       = require('./co.rethinkdb')
@@ -38,11 +37,10 @@ module.exports = function(dbconfig) {
             , method = params.method
             , that = this
             , table = this.table
-            , deferred = Q.defer()
 
             r = _r(this.dbconfig);
 
-            co(function* (){
+            return co(function* (){
                 createdTime = Date.now();
                 switch (method) {
                     case 'read':
@@ -66,10 +64,9 @@ module.exports = function(dbconfig) {
                         result = yield r.table(table).get(that.id).delete();
                         break;
                 }
-
-                if (!result || method !== 'read' && result.errors && params.error) {
-                    params.error(result);
-                    deferred.reject(new Error());
+                if (!result || method !== 'read' && result.errors) {
+                    params.error && params.error(result);
+                    throw result;
                     return;
                 }
 
@@ -80,11 +77,10 @@ module.exports = function(dbconfig) {
                 }
 
                 params.success && params.success(result);
-                deferred.resolve(result);
+                return result;
 
-            }).catch(function(err){console.error(err.stack)});
+            })
 
-            return deferred.promise;
         }
 
         , save: function(key, val, options) {

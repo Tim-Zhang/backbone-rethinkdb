@@ -1,5 +1,4 @@
 var _        = require('underscore')
-  , Q        = require('q')
   , Backbone = require('backbone')
   , co       = require('co')
   , _r       = require('./co.rethinkdb')
@@ -33,16 +32,12 @@ module.exports = function(dbconfig) {
             return xhr;
         }
         , count: function() {
-            var deferred = Q.defer()
-              , that = this
+            var that = this
+              , r = _r(dbconfig);
 
-            r = _r(dbconfig);
-
-            co(function* () {
-                var count = yield r.table(that.table).count()
-                deferred.resolve(count)
+            return co(function* () {
+                return yield r.table(that.table).count()
             });
-            return deferred.promise;
         }
 
         , ajax: function(params) {
@@ -53,24 +48,18 @@ module.exports = function(dbconfig) {
             , start = params.start || 0
             , orderBy = params.orderBy || 'createTime'
             , length = params.length || 100
-            , deferred = Q.defer()
 
-            this.model.table = table
-            r = _r(dbconfig);
-
-            co(function* (){
+            return co(function* (){
                 if (orderBy){
                     result = yield r.table(table).orderBy(orderBy).slice(start, length);
                 } else {
                     result = yield r.table(table).limit(5);
-                    console.log(result);
                 }
 
                 params.success && params.success(result);
-                deferred.resolve(result);
-            }).catch(function(err){console.error(err.stack)});
+                return result;
+            })
 
-            return deferred.promise;
         }
 
     });
