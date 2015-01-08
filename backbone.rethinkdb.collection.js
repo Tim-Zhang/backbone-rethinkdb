@@ -66,8 +66,6 @@ module.exports = function(dbconfig) {
                     console.log(result);
                 }
 
-
-
                 params.success && params.success(result);
                 deferred.resolve(result);
             }).catch(function(err){console.error(err.stack)});

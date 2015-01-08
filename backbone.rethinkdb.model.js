@@ -82,7 +82,6 @@ module.exports = function(dbconfig) {
                 params.success && params.success(result);
                 deferred.resolve(result);
 
-
             }).catch(function(err){console.error(err.stack)});
 
             return deferred.promise;
