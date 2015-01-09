@@ -46,22 +46,21 @@ module.exports = function(config) {
 
   RDBOp.prototype.then = function() {
     if (!this._promise) {
-      var query = this
-      this._promise = new Promise(function(resolve, reject) {
-        var conn, res;
-        co(function*() {
-          conn = yield r.getConnection
-          res  = yield run.call(query, conn)
-          r.releaseConnection(conn)
-          resolve(res)
-        }).catch(function(err) {
-          reject(err)
-          conn && r.releaseConnection(conn)
-        })
+      var query = this, conn;
+
+      this._promise = co(function*() {
+        conn = yield r.getConnection
+        return yield run.call(query, conn)
+      })
+
+      this._promise.then(function(result) {
+        r.releaseConnection(conn)
+      }).catch(function(err) {
+        conn && r.releaseConnection(conn)
       })
     }
 
-    this._promise.then.apply(this._promise, arguments)
+    return this._promise.then.apply(this._promise, arguments)
   }
 
   // Wrap the original `.each()` method.
