@@ -19,6 +19,12 @@ module.exports = function(dbconfig) {
         table: 'test'
         , model: rModel(dbconfig)
 
+        , initialize: function( attr, options ) {
+            if ( options ) {
+                _.extend(this, _.pick(options, 'table'));
+            }
+        }
+
         , sync: function(method, model, options) {
             var params = { method: method };
 
@@ -31,6 +37,7 @@ module.exports = function(dbconfig) {
             model.trigger('request', model, xhr, options);
             return xhr;
         }
+
         , count: function() {
             var that = this
               , r = _r(dbconfig);

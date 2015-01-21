@@ -19,6 +19,12 @@ module.exports = function(dbconfig) {
         , table: 'test'
         , filterId: 'id'
 
+        , initialize: function( attr, options ) {
+            if ( options ) {
+                _.extend(this, _.pick(options, 'table', 'filterId'));
+            }
+        }
+
         , sync: function(method, model, options) {
             var params = { method: method };
 
