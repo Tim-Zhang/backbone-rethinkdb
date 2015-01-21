@@ -1,16 +1,18 @@
 var co = require('co')
   , _  = require('underscore')
   , r = require('../co.rethinkdb')()
-  , BackboneRdb = require('../index')({database: 'test', table: 'user'});
+  , BackboneRdb = require('../index');
 
 var passed = 0;
 
 // Collection
 var Users = BackboneRdb.Collection.extend({
+    database: 'test',
     table: 'user'
 });
 // Model
 var User = BackboneRdb.Model.extend({
+    database: 'test',
     table: 'user'
 });
 

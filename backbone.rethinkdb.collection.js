@@ -8,7 +8,6 @@ var _        = require('underscore')
 module.exports = function(dbconfig) {
     dbconfig || (dbconfig = {
           host: 'localhost'
-        , database: 'test'
         , port: 28015
     });
 
@@ -16,12 +15,16 @@ module.exports = function(dbconfig) {
     if (!dbconfig.port) dbconfig.port = 28015;
 
     return Backbone.Collection.extend({
-        table: 'test'
+        host: dbconfig.host
+        , database: dbconfig.db || dbconfig.database
+        , port: dbconfig.port
+        , table: dbconfig.table
         , model: rModel(dbconfig)
 
         , initialize: function( attr, options ) {
             if ( options ) {
-                _.extend(this, _.pick(options, 'table'));
+                _.extend(this, _.pick(options, 'table', 'host', 'database', 'port'));
+                options.db && ( this.database = options.db );
             }
         }
 
@@ -39,11 +42,12 @@ module.exports = function(dbconfig) {
         }
 
         , count: function() {
-            var that = this
-              , r = _r(dbconfig);
+            var db = this.database
+              , table = this.table
+              , r = _r({host: this.host, database: this.database, port: this.port});
 
             return co(function* () {
-                return yield r.table(that.table).count()
+                return yield r.db(db).table(table).count()
             });
         }
 
@@ -52,15 +56,17 @@ module.exports = function(dbconfig) {
             , method = params.method
             , that = this
             , table = this.table
+            , db = this.database
             , start = params.start || 0
             , orderBy = params.orderBy || 'createTime'
             , length = params.length || 100
+            , r = _r({host: this.host, database: this.database, port: this.port});
 
             return co(function* (){
                 if (orderBy){
-                    result = yield r.table(table).orderBy(orderBy).slice(start, length);
+                    result = yield r.db(db).table(table).orderBy(orderBy).slice(start, length);
                 } else {
-                    result = yield r.table(table).limit(5);
+                    result = yield r.db(db).table(table).limit(5);
                 }
 
                 params.success && params.success(result);

@@ -4,5 +4,5 @@ module.exports = function(config) {
         Collection: require('./backbone.rethinkdb.collection')(config)
     }
 }
-module.exports.Model = require('./backbone.rethinkdb.model');
-module.exports.Collection = require('./backbone.rethinkdb.collection');
+module.exports.Model = require('./backbone.rethinkdb.model')();
+module.exports.Collection = require('./backbone.rethinkdb.collection')();

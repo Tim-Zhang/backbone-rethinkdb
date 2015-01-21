@@ -7,7 +7,6 @@ var _        = require('underscore')
 module.exports = function(dbconfig) {
     dbconfig || (dbconfig = {
           host: 'localhost'
-        , database: 'test'
         , port: 28015
     });
 
@@ -15,13 +14,16 @@ module.exports = function(dbconfig) {
     if (!dbconfig.port) dbconfig.port = 28015;
 
     return Backbone.Model.extend({
-          dbconfig: dbconfig
-        , table: 'test'
+          host: dbconfig.host
+        , database: dbconfig.db || dbconfig.database
+        , port: dbconfig.port
+        , table: dbconfig.table
         , filterId: 'id'
 
         , initialize: function( attr, options ) {
             if ( options ) {
-                _.extend(this, _.pick(options, 'table', 'filterId'));
+                _.extend(this, _.pick(options, 'table', 'filterId', 'host', 'database', 'port'));
+                options.db && ( this.database = options.db );
             }
         }
 
@@ -43,31 +45,31 @@ module.exports = function(dbconfig) {
             , method = params.method
             , that = this
             , table = this.table
-
-            r = _r(this.dbconfig);
+            , db = this.database
+            , r = _r({host: this.host, database: this.database, port: this.port});
 
             return co(function* (){
                 createdTime = Date.now();
                 switch (method) {
                     case 'read':
                         if (that.id) {
-                            result = yield r.table(table).get(that.id);
+                            result = yield r.db(db).table(table).get(that.id);
                         } else {
-                            cursor = yield r.table(table).filter(r.row(that.filterId).eq(that.get(that.filterId)));
+                            cursor = yield r.db(db).table(table).filter(r.row(that.filterId).eq(that.get(that.filterId)));
                             result = yield cursor.toArray();
                             result = result[0];
                         }
                         break;
                     case 'create':
                         params.data.createdTime = createdTime;
-                        result = yield r.table(table).insert(params.data);
+                        result = yield r.db(db).table(table).insert(params.data);
                         break;
                     case 'update':
                     case 'patch':
-                        result = yield r.table(table).get(that.id).update(params.data);
+                        result = yield r.db(db).table(table).get(that.id).update(params.data);
                         break;
                     case 'delete':
-                        result = yield r.table(table).get(that.id).delete();
+                        result = yield r.db(db).table(table).get(that.id).delete();
                         break;
                 }
                 if (!result || method !== 'read' && result.errors) {
