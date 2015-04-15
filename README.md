@@ -34,7 +34,7 @@ co(function* () {
     yield user2.fetch();
 
     // Modify Model
-    yield user2.save({age: 19});
+    yield user.save({age: 19});
 
     // Delete Model
     yield user.destroy();

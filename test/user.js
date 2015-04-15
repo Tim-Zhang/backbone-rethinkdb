@@ -34,22 +34,26 @@ co(function* () {
     yield user2.fetch();
 
     if ( _.isEqual(user.toJSON(), user2.toJSON()) ) {
-        console.log('Create/Fetch Model is OK.');
+        console.log('Creating/Fetching Model is OK.');
         passed++;
     } else {
-        console.error('There are some errors about create/fetch Model');
+        console.error('There are some error about Model creating/fetching');
     }
 
-    // Modify User
-    yield user2.save({age: 19});
+    // Update User
+    user.set('age', 19);
+    user.unset('sex')
+
+    yield user.save();
     yield user.fetch();
 
-    if (user.get('age') === 19) {
-        console.log('Modify Model is OK.');
+    if (user.get('name') === 'Lilei' && user.get('age') === 19 && user.get('sex') === undefined) {
+        console.log('Updating Model attributes is OK.');
         passed++;
     } else {
-        console.error('There are some errors about modify Model');
+        console.error('There are some error about Model updating');
     }
+
 
     /* Collection Test */
     var users = new Users()
@@ -58,7 +62,7 @@ co(function* () {
         console.log('Collection is OK.');
         passed++;
     } else {
-        console.error('There are some errors about Collection');
+        console.error('There are some error about Collection');
     }
 
     if (passed === 3) console.log('====== Everthing is OK. ======');
@@ -70,5 +74,3 @@ function* createDbTable() {
         try { yield r.tableCreate('user'); } catch(e) {}
     }
 }
-
-

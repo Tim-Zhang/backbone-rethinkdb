@@ -49,7 +49,7 @@ module.exports = function(dbconfig) {
             , r = _r({host: this.host, database: this.database, port: this.port});
 
             return co(function* (){
-                createdTime = Date.now();
+                var createdTime = Date.now();
                 switch (method) {
                     case 'read':
                         if (that.id) {
@@ -65,6 +65,8 @@ module.exports = function(dbconfig) {
                         result = yield r.db(db).table(table).insert(params.data);
                         break;
                     case 'update':
+                        result = yield r.db(db).table(table).get(that.id).replace(_.extend({id: that.id}, params.data));
+                        break;
                     case 'patch':
                         result = yield r.db(db).table(table).get(that.id).update(params.data);
                         break;
@@ -89,10 +91,6 @@ module.exports = function(dbconfig) {
 
             })
 
-        }
-
-        , save: function(key, val, options) {
-            return Backbone.Model.prototype.save.call(this, key, val, _.extend({ patch: true }, options));
         }
 
 
