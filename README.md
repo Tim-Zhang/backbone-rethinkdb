@@ -3,7 +3,6 @@ Backbone-RethinkDB
 
 [![NPM version][npm-image]][npm-url]
 
-## What is this?
 A Backbone version syncing with rethinkdb.
 just use it like normal Backbone, the only difference is syncing(replace ajax to rethinkdb)
 
