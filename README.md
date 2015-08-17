@@ -7,6 +7,11 @@ Backbone-RethinkDB
 A Backbone version syncing with rethinkdb.
 just use it like normal Backbone, the only difference is syncing(replace ajax to rethinkdb)
 
+## Installation
+```
+$ npm i backbone-rethinkdb
+```
+
 ## Usage
 
 ```
