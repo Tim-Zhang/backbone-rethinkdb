@@ -1,5 +1,8 @@
 Backbone-RethinkDB
 ===========================
+
+[![NPM version][npm-image]][npm-url]
+
 ## What is this?
 A Backbone version syncing with rethinkdb.
 just use it like normal Backbone, the only difference is syncing(replace ajax to rethinkdb)
@@ -64,3 +67,7 @@ Modify Model is OK.
 Collection is OK.
 ====== Everthing is OK. ======
 ```
+
+
+[npm-image]: https://img.shields.io/npm/v/backbone-rethinkdb.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/backbone-rethinkdb
