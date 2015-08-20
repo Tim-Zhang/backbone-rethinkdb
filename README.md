@@ -63,7 +63,7 @@ co(function* () {
 - use `node --harmony`
 
 ## Testing
-`npm test`
+`$ npm test`
 
 ```
 Create/Fetch Model is OK.
